@@ -11,7 +11,8 @@
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "golemio:generate-types": "npx openapi-typescript https://api.golemio.cz/docs/static/vp-output-gateway/openapi.json -o ./app/services/golemio-api-schema.d.ts"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
