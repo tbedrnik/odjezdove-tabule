@@ -3,11 +3,12 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TablesController {
   async index({ inertia }: HttpContext) {
-    const { trips, infotexts } = await getDepartureBoard()
+    const { trips, infotexts, now } = await getDepartureBoard()
 
     return inertia.render('tables/table', {
       trips,
       infotexts,
+      now,
     })
   }
 }

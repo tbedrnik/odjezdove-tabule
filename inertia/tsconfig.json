@@ -6,7 +6,8 @@
     "jsx": "react-jsx",
     "paths": {
       "~/*": ["./*"]
-    }
+    },
+    "types": ["vite/client", "./types.d.ts"]
   },
   "include": ["./**/*.ts", "./**/*.tsx"]
 }

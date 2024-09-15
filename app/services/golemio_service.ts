@@ -72,13 +72,13 @@ export async function getDepartureBoard() {
   const infotexts = (data.infotexts ?? []).map((i) => i.text)
 
   if (!stops) {
-    return { trips: [], infotexts }
+    return { trips: [], infotexts, now }
   }
 
   const stopsNames = Object.fromEntries(stops.map((stop) => [stop.stop_id, stop.stop_name]))
 
   if (!departures) {
-    return { trips: [], infotexts }
+    return { trips: [], infotexts, now }
   }
 
   const trips: Record<
@@ -151,7 +151,7 @@ export async function getDepartureBoard() {
     }
   }
 
-  return { trips: Object.values(trips), infotexts }
+  return { trips: Object.values(trips), infotexts, now }
 }
 
 function isImpossibleToCatch(

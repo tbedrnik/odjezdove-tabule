@@ -1,4 +1,8 @@
+/// <reference path="./types/importMeta.d.ts" />
+
+import type { FC, SVGProps } from 'react'
+
 declare module '*.svg' {
-  import React = require('react')
-  export default React.SFC<React.SVGProps<SVGSVGElement>>
+  const svg: React.FC<SVGProps<SVGSVGElement>>
+  export default svg
 }
