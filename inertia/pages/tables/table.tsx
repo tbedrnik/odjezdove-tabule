@@ -1,16 +1,15 @@
 import { InferPageProps } from '@adonisjs/inertia/types'
 import TablesController from '#controllers/tables_controller'
 import { Head } from '@inertiajs/react'
-import {
-  Snowflake,
-  TramFront,
-  BusFront,
-  TrainFront,
-  TrainFrontTunnel,
-  CableCar,
-  ShipIcon,
-  Footprints,
-} from 'lucide-react'
+import { Snowflake, Footprints } from 'lucide-react'
+
+import TravelBus from '../../svg/travel-bus.svg'
+import TravelCableway from '../../svg/travel-cableway.svg'
+import TravelFerry from '../../svg/travel-ferry.svg'
+import TravelMetro from '../../svg/travel-metro.svg'
+import TravelTrain from '../../svg/travel-train.svg'
+import TravelTram from '../../svg/travel-tram.svg'
+import TravelTrolley from '../../svg/travel-trolley.svg'
 
 const formatTime = (dateStr: string) => {
   const d = new Date(dateStr)
@@ -48,13 +47,13 @@ export default function Table({ trips, infotexts }: InferPageProps<TablesControl
                 <div className="flex items-start space-x-6">
                   <div className="flex-shrink-0 pt-1">
                     <div className="bg-primary text-primary-foreground w-14 h-14 rounded-full flex items-center justify-center">
-                      {trip.routeType === 'bus' && <BusFront className="w-8 h-8" />}
-                      {trip.routeType === 'trolleybus' && <BusFront className="w-8 h-8" />}
-                      {trip.routeType === 'train' && <TrainFront className="w-8 h-8" />}
-                      {trip.routeType === 'tram' && <TramFront className="w-8 h-8" />}
-                      {trip.routeType === 'metro' && <TrainFrontTunnel className="w-8 h-8" />}
-                      {trip.routeType === 'funicular' && <CableCar className="w-8 h-8" />}
-                      {trip.routeType === 'ferry' && <ShipIcon className="w-8 h-8" />}
+                      {trip.routeType === 'bus' && <TravelBus className="w-10 h-10" />}
+                      {trip.routeType === 'trolleybus' && <TravelTrolley className="w-10 h-10" />}
+                      {trip.routeType === 'train' && <TravelTrain className="w-10 h-10" />}
+                      {trip.routeType === 'tram' && <TravelTram className="w-10 h-10" />}
+                      {trip.routeType === 'metro' && <TravelMetro className="w-10 h-10" />}
+                      {trip.routeType === 'funicular' && <TravelCableway className="w-10 h-10" />}
+                      {trip.routeType === 'ferry' && <TravelFerry className="w-10 h-10" />}
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
