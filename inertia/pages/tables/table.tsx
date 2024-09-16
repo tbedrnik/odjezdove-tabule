@@ -48,8 +48,8 @@ export default function Table({
                 <motion.li
                   key={trip.tripId}
                   layout
-                  className={`shadow-lg dark:shadow-none bg-white dark:bg-slate-900 p-6 rounded-lg first:rounded-t-lg last:rounded-b-lg${trip.isWalkable ? '' : ' opacity-50'}`}
-                  animate={{ scale: 1, opacity: 1 }}
+                  className="shadow-lg dark:shadow-none bg-white dark:bg-slate-900 p-6 rounded-lg first:rounded-t-lg last:rounded-b-lg"
+                  animate={{ scale: 1, opacity: trip.isWalkable ? 1 : 0.5 }}
                   transition={{ type: 'tween', ease: 'easeInOut' }}
                   exit={{ scale: 0.8, opacity: 0 }}
                 >
