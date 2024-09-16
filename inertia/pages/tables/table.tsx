@@ -42,15 +42,15 @@ export default function Table({
               </ul>
             )}
           </div>
-          <ul className="bg-white dark:bg-slate-900 shadow-lg dark:shadow-none rounded-lg divide-y divide-slate-200 dark:divide-slate-800">
-            <AnimatePresence mode="popLayout">
+          <ul className="flex flex-col gap-2">
+            <AnimatePresence mode="sync">
               {trips.map((trip) => (
                 <motion.li
                   key={trip.tripId}
                   layout
-                  className={`p-6${trip.isWalkable ? '' : ' opacity-50'}`}
+                  className={`shadow-lg dark:shadow-none bg-white dark:bg-slate-900 p-6 rounded-lg first:rounded-t-lg last:rounded-b-lg${trip.isWalkable ? '' : ' opacity-50'}`}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ type: 'spring' }}
+                  transition={{ type: 'tween', ease: 'easeInOut' }}
                   exit={{ scale: 0.8, opacity: 0 }}
                 >
                   <div className="flex items-start space-x-6">
