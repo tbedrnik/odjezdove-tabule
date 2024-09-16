@@ -1,45 +1,22 @@
-import { golemioToken } from '#config/golemio'
+import { Secret } from '@adonisjs/core/helpers'
 import * as GolemioApiTypes from './golemio-api-schema.js'
+import BoardStation from '#models/board_station'
+import Station from '#models/station'
 
 type PIDDepartureBoard = GolemioApiTypes.components['schemas']['PIDDepartureBoard']
 type PIDDepartureBoardStopTime = GolemioApiTypes.components['schemas']['PIDDepartureBoardStopTime']
 
-const input = [
-  // Vozovna Kobylisy v ulici Klapkova smer Kobylisy
-  {
-    stopId: 'U864Z5P',
-    showDepartures: true,
-    minutesToWalk: 5,
-  },
-  // Mirovicka smer Kobylisy
-  {
-    stopId: 'U1011Z2P',
-    showDepartures: true,
-    minutesToWalk: 3,
-  },
-  // Kobylisy tram smer Ke strice
-  {
-    stopId: 'U675Z1P',
-    showDepartures: true,
-    minutesToWalk: 12,
-  },
-  // Libensky Zamek smer Palmovka
-  {
-    stopId: 'U471Z1P',
-    showDepartures: false,
-  },
-  // Kobylisy metro smer centrum
-  {
-    stopId: 'U675Z102P',
-    showDepartures: true,
-    minutesToWalk: 12,
-  },
-]
+export type DepartureBoardStation = Pick<BoardStation, 'showDepartures' | 'minutesToWalk'> & {
+  station: Pick<Station, 'gtfsId'>
+}
 
-export async function getDepartureBoard() {
+export async function getDepartureBoard(
+  boardStations: DepartureBoardStation[],
+  token: Secret<string>
+) {
   const url = new URL('/v2/pid/departureboards', 'https://api.golemio.cz')
 
-  for (const stopId of input.map((i) => i.stopId)) {
+  for (const stopId of boardStations.map((boardStation) => boardStation.station.gtfsId)) {
     url.searchParams.append('ids', stopId)
   }
 
@@ -48,9 +25,7 @@ export async function getDepartureBoard() {
 
   url.searchParams.set('timeFrom', now.toISOString())
 
-  url.searchParams.set('mode', 'departures')
   url.searchParams.set('minutesAfter', '240')
-  url.searchParams.set('mode', 'departures')
   url.searchParams.set('airCondition', 'true')
 
   url.searchParams.set('limit', '50')
@@ -60,7 +35,7 @@ export async function getDepartureBoard() {
   const res = await fetch(url, {
     headers: {
       'Accept': 'application/json',
-      'X-Access-Token': golemioToken.release(),
+      'X-Access-Token': token.release(),
     },
   })
 
@@ -99,7 +74,11 @@ export async function getDepartureBoard() {
     }
   > = {}
 
-  const departureStopsMap = new Map(input.filter((i) => i.showDepartures).map((i) => [i.stopId, i]))
+  const departureStopsMap = new Map(
+    boardStations
+      .filter((boardStation) => boardStation.showDepartures)
+      .map((boardStation) => [boardStation.station.gtfsId, boardStation])
+  )
 
   for (const item of departures) {
     const { trip, stop, route } = item
@@ -154,17 +133,13 @@ export async function getDepartureBoard() {
   return { trips: Object.values(trips), infotexts, now }
 }
 
-function isImpossibleToCatch(
-  leavesAt: string,
-  minutesToWalk: number | undefined,
-  now = new Date()
-) {
+function isImpossibleToCatch(leavesAt: string, minutesToWalk: number | null, now = new Date()) {
   const IMPOSSIBILITY_MINUTES = 2
 
   return !isWalkable(leavesAt, (minutesToWalk ?? 0) - IMPOSSIBILITY_MINUTES, now)
 }
 
-function isWalkable(leavesAt: string, minutesToWalk: number | undefined, now = new Date()) {
+function isWalkable(leavesAt: string, minutesToWalk: number | null, now = new Date()) {
   const arriveAt = now.valueOf() + (minutesToWalk ?? 0) * 60 * 1000
 
   return new Date(leavesAt) >= new Date(arriveAt)

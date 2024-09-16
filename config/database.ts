@@ -19,6 +19,7 @@ const dbConfig = defineConfig({
       },
     },
   },
+  prettyPrintDebugQueries: true,
 })
 
 export default dbConfig
