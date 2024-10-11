@@ -41,13 +41,13 @@ export default function Board({
               </ul>
             )}
           </div>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-4">
             <AnimatePresence mode="sync">
               {trips.map((trip) => (
                 <motion.li
                   key={trip.tripId}
                   layout
-                  className="bg-card border shadow-lg dark:shadow-none p-6 rounded-lg first:rounded-t-lg last:rounded-b-lg"
+                  className="bg-card border shadow-lg dark:shadow-none p-6 rounded-lg"
                   animate={{ scale: 1, opacity: trip.isWalkable ? 1 : 0.5 }}
                   transition={{ type: 'tween', ease: 'easeInOut' }}
                   exit={{ scale: 0.8, opacity: 0 }}

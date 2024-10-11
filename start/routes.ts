@@ -31,3 +31,10 @@ router
 const BoardsController = () => import('#controllers/boards_controller')
 
 router.resource('boards', BoardsController).use('*', middleware.auth())
+
+const StationsController = () => import('#controllers/stations_controller')
+
+router
+  .get('stations/search', [StationsController, 'search'])
+  .as('stations.search')
+  .use(middleware.auth())
