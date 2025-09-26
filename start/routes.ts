@@ -9,6 +9,8 @@
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
+import AutoSwagger from 'adonis-autoswagger'
+import swagger from '#config/swagger'
 
 router
   .group(() => {
@@ -29,12 +31,17 @@ router
   .as('auth')
 
 const BoardsController = () => import('#controllers/boards_controller')
-
 router.resource('boards', BoardsController).use('*', middleware.auth())
 
 const StationsController = () => import('#controllers/stations_controller')
-
 router
   .get('stations/search', [StationsController, 'search'])
   .as('stations.search')
   .use(middleware.auth())
+
+router
+  .group(() => {
+    router.get('/swagger', () => AutoSwagger.default.docs(router.toJSON(), swagger)).as('yaml')
+    router.get('/docs', () => AutoSwagger.default.scalar('/swagger')).as('ui')
+  })
+  .as('swagger')
